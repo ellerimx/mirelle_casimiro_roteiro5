@@ -12,7 +12,7 @@ public class MeuConjuntoDinamico implements ConjuntoDinamicoIF<Integer> {
 	 * metodo para insercaoo de um elemento no conjunto dinamico. Se estiver cheio
 	 * é chamada uma funcaoo para aumentar o tamanho do conjunto.
 	 *
-	 * @author Mirelle Casimiro
+	 * @author Mirelle Casimiro 
 	 *
 	 */
 
