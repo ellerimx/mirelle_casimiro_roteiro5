@@ -2,32 +2,29 @@ package tad.conjuntoDinamico;
 
 import tad.ElementoNaoEncontradoException;
 
-public class MeuConjuntoDinamicoEncadeado implements ConjuntoDinamicoIF<Integer> {
+class Node{
+	Integer valor;
+	Node prox; // aponta p o proximo
 
-	// implementacao com lista simples
-	private class Node {
-		Integer valor;
-		Node prox; // aponta p o proximo
-
-		Node(Integer valor) {
-			this.valor = valor;
-			this.prox = null;
-		}
+	Node(Integer valor) {
+		this.valor = valor;
+		this.prox = null;
 	}
+
+}
+public class MeuConjuntoDinamicoEncadeado implements ConjuntoDinamicoIF<Integer> {
 
 	private Node cabeca;
 	private int tamanho;
 
 	public MeuConjuntoDinamicoEncadeado() {
-		cabeca = null;
-		tamanho = 0;
+		this.cabeca = null;
+		this.tamanho = 0;
 	}
 
 
 	@Override
 	public void inserir(Integer item) {
-		// TODO Auto-generated method stub
-
 		Node novo = new Node(item);
 		novo.prox = cabeca;
 		cabeca = novo;
@@ -36,12 +33,6 @@ public class MeuConjuntoDinamicoEncadeado implements ConjuntoDinamicoIF<Integer>
 
 	@Override
 	public Integer remover(Integer item) throws ElementoNaoEncontradoException {
-		// TODO Auto-generated method stub
-
-		if (cabeca == null) {
-			throw new RuntimeException("conjunto dinamico vazio");
-		}
-
 		Node atual = cabeca, anterior = null;
 
 		while (atual != null) {
@@ -51,31 +42,24 @@ public class MeuConjuntoDinamicoEncadeado implements ConjuntoDinamicoIF<Integer>
 				} else {
 					anterior.prox = atual.prox;
 				}
-
 				tamanho--;
-				return atual.valor;
+				return item;
 			}
 			anterior = atual;
 			atual = atual.prox;
 		}
+
 		throw new ElementoNaoEncontradoException();
 	}
 
 	@Override
 	public Integer predecessor(Integer item) throws ElementoNaoEncontradoException {
-		// TODO Auto-generated method stub
-
-		if (cabeca == null) {
-			throw new RuntimeException("conjunto dinamico vazio");
-		}
 
 		Node atual = cabeca, anterior = null;
-
 		while (atual != null) {
 			if (atual.valor.equals(item)) {
-				return anterior == null ? null : anterior.valor;
+				return (anterior != null) ? anterior.valor : null;
 			}
-
 			anterior = atual;
 			atual = atual.prox;
 		}
@@ -85,16 +69,28 @@ public class MeuConjuntoDinamicoEncadeado implements ConjuntoDinamicoIF<Integer>
 
 	@Override
 	public Integer sucessor(Integer item) throws ElementoNaoEncontradoException {
-		// TODO Auto-generated method stub
-
-		if (cabeca == null) {
-			throw new RuntimeException("conjunto dinamico vazio");
-		}
 		Node atual = cabeca;
+		while (atual != null && atual.prox != null) {
+			if (atual.valor.equals(item)) {
+				return atual.prox.valor;
+			}
+			atual = atual.prox;
+		}
+		if (atual != null && atual.valor.equals(item)) return null;
+		throw new ElementoNaoEncontradoException();
+	}
 
+	@Override
+	public int tamanho() {
+		return tamanho;
+	}
+
+	@Override
+	public Integer buscar(Integer item) throws ElementoNaoEncontradoException {
+		Node atual = cabeca;
 		while (atual != null) {
 			if (atual.valor.equals(item)) {
-				return atual.prox == null ? null : atual.prox.valor;
+				return item;
 			}
 			atual = atual.prox;
 		}
@@ -102,41 +98,21 @@ public class MeuConjuntoDinamicoEncadeado implements ConjuntoDinamicoIF<Integer>
 	}
 
 	@Override
-	public int tamanho() {
-		// TODO Auto-generated method stub
-
-		return tamanho;
-	}
-
-	@Override
-	public Integer buscar(Integer item) {
-		// TODO Auto-generated method stub
-		Node atual = cabeca;
-		while (atual != null) {
-			if (atual.valor.equals(item)) {
-				return atual.valor;
-			}
-			atual = atual.prox;
-		}
-		return null;
-	}
-
-	@Override
 	public Integer minimum() {
-		// TODO Auto-generated method stub
 
 		if (cabeca == null) {
 			throw new RuntimeException("conjunto dinamico vazio");
 		}
-		Node atual = cabeca;
-		int menorNum = atual.valor;
+
+		Integer min = cabeca.valor;
+		Node atual = cabeca.prox;
 		while (atual != null) {
-			if (atual.valor < menorNum) {
-				menorNum = atual.valor;
+			if (atual.valor < min) {
+				min = atual.valor;
 			}
 			atual = atual.prox;
 		}
-		return menorNum;
+		return min;
 	}
 
 	@Override
@@ -146,16 +122,15 @@ public class MeuConjuntoDinamicoEncadeado implements ConjuntoDinamicoIF<Integer>
 		if (cabeca == null) {
 			throw new RuntimeException("conjunto dinamico vazio");
 		}
-		Node atual = cabeca;
-		int maiorNum = atual.valor;
-
+		Integer max = cabeca.valor;
+		Node atual = cabeca.prox;
 		while (atual != null) {
-			if (atual.valor > maiorNum) {
-				maiorNum = atual.valor;
+			if (atual.valor > max) {
+				max = atual.valor;
 			}
 			atual = atual.prox;
 		}
-		return maiorNum;
+		return max;
 	}
 
 }

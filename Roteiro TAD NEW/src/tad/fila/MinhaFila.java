@@ -8,10 +8,11 @@ package tad.fila;
  */
 public class MinhaFila implements FilaIF<Integer> {
 	
-	private int tamanho = 10;
+	private int tamanho = 5;
 
-	private int cauda = 1;
+	private int cauda = 0;
 	private int cabeca = 0;
+	private int quantidade = 0;
 	
 	private Integer[] meusDados = null;
 
@@ -32,6 +33,7 @@ public class MinhaFila implements FilaIF<Integer> {
 
 		meusDados[cauda] = item;
 		cauda = (cauda + 1) % tamanho;
+		quantidade++;
 	}
 
 	@Override
@@ -41,8 +43,9 @@ public class MinhaFila implements FilaIF<Integer> {
 			throw new FilaVaziaException();
 		}
 
+		quantidade--;
 		Integer item = meusDados[cauda];
-		meusDados[cabeca] = null;
+		//meusDados[cabeca] = null;
 		cabeca = (cabeca + 1) % tamanho;
 		return item;
 	}
@@ -53,8 +56,8 @@ public class MinhaFila implements FilaIF<Integer> {
 			return null;
 		}
 
-		int posicao = (cauda - 1 + tamanho) % tamanho;
-		return meusDados[posicao];
+		int posicaoAnterior = (cauda - 1 + tamanho) % tamanho;
+		return meusDados[posicaoAnterior];
 	}
 
 	@Override
@@ -68,12 +71,12 @@ public class MinhaFila implements FilaIF<Integer> {
 
 	@Override
 	public boolean isEmpty() {
-		return cabeca == cauda && meusDados[cabeca] == null;
+		return quantidade == 0;
 	}
 
 	@Override
 	public boolean isFull() {
-		return cabeca == cauda && meusDados[cabeca] != null;
+		return quantidade == tamanho;
 	}
 
 	@Override
@@ -83,13 +86,7 @@ public class MinhaFila implements FilaIF<Integer> {
 
 	@Override
 	public int tamanho() {
-		int count = 0;
-		for (Integer item : meusDados) {
-			if (item != null) {
-				count++;
-			}
-		}
-		return count;
+		return quantidade;
 	}
 
 

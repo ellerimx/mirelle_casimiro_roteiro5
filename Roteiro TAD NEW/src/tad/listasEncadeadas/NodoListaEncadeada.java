@@ -60,7 +60,9 @@ public class NodoListaEncadeada<T extends Comparable<T>> {
 			return this.chave.toString();
 		return null;
 	}
-	
-	
+
+	public NodoListaEncadeada<T> getAnterior() {
+		return null;
+	}
 
 }

@@ -8,9 +8,11 @@ public interface PilhaIF<E> {
 	
 	public E topo();
 	
-	public PilhaIF<E> multitop(int k);
+	public PilhaIF<E> multitop(int k) throws PilhaCheiaException, PilhaVaziaException;
 	
 	public boolean isEmpty();
+
+    //boolean isFull();
 
     public int capacidade();
 

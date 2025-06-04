@@ -1,88 +1,73 @@
 package tad.fila;
 
+import tad.listasEncadeadas.NodoListaEncadeada;
+
 public class MinhaFilaEncadeada implements FilaIF<Integer> {
 
 	//private ListaEncadeadaIF filaEncadeada = null;
 
-	private class Node {
-		Integer valor;
-		Node prox;
+	private NodoListaEncadeada<Integer> cabeca;
+	private NodoListaEncadeada<Integer> cauda;
 
-		Node(Integer valor) {
-			this.valor = valor;
-			this.prox = null;
-		}
+	public MinhaFilaEncadeada(){
+		cabeca = null;
+		cauda = null;
 	}
-
-	private Node cabeca = null;
-	private Node cauda = null;
-	private int tamanho = 0;
 
 	@Override
 	public void enfileirar(Integer item) throws FilaCheiaException {
-		// TODO Auto-generated method stub
+		NodoListaEncadeada<Integer> novoNodo = new NodoListaEncadeada<>(item);
 
-		Node novo = new Node(item);
-		if(isEmpty()){
-			cabeca = novo;
-			cauda = novo;
+		if (isEmpty()) {
+			cabeca = novoNodo;
+			cauda = novoNodo;
+		} else {
+			cauda.setProximo(novoNodo);
+			cauda = novoNodo;
 		}
-		else {
-			//cabeca.prox = novo;
-			cauda.prox = novo;
-			cauda = novo;
-		}
-		tamanho++;
 	}
 
 	@Override
 	public Integer desenfileirar() throws FilaVaziaException {
-		// TODO Auto-generated method stub
-
-		if(isEmpty()){
+		if (isEmpty()) {
 			throw new FilaVaziaException();
 		}
 
-		Integer valor = cabeca.valor;
-		cabeca = cabeca.prox;
+		Integer valor = cabeca.getChave();
+		cabeca = cabeca.getProximo();
 
-		if(cabeca == null){
+		if (cabeca == null) {
 			cauda = null;
 		}
-		tamanho--;
+
 		return valor;
 	}
 
 	@Override
 	public Integer verificarCauda() {
-		// TODO Auto-generated method stub
-
 		if(cauda != null){
-			return cauda.valor;
+			return cauda.getChave();
+		} else{
+			return null;
 		}
-
-		return null;
 	}
 
 	@Override
 	public Integer verificarCabeca() {
-		// TODO Auto-generated method stub
-
-		if(cabeca!=null){
-			return cabeca.valor;
+		if (cabeca != null) {
+			return cabeca.getChave();
+		} else {
+			return null;
 		}
-		return null;
 	}
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return tamanho == 0;
+		return cabeca == null;
 	}
 
 	@Override
 	public boolean isFull() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -93,7 +78,13 @@ public class MinhaFilaEncadeada implements FilaIF<Integer> {
 
 	@Override
 	public int tamanho() {
-		return tamanho;
+		int contador = 0;
+		NodoListaEncadeada<Integer> atual = cabeca;
+		while (atual != null) {
+			contador++;
+			atual = atual.getProximo();
+		}
+		return contador;
 	}
 
 }

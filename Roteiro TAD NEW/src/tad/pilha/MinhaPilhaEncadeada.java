@@ -1,38 +1,80 @@
 package tad.pilha;
 
+import tad.listasEncadeadas.ListaEncadeadaIF;
+import tad.listasEncadeadas.NodoListaEncadeada;
+
 public class MinhaPilhaEncadeada implements PilhaIF<Integer> {
 	
-//	private ListaEncadeadaIF<Integer> listaEncadeada = new MinhaListaEncadeada<Integer>();
+	//private final ListaEncadeadaIF<Integer> listaEncadeada = new ListaEncadeadaImpl<>();
+
+	private NodoListaEncadeada<Integer> cabeca;
+
+	public MinhaPilhaEncadeada(){
+		cabeca = null;
+	}
 
 	@Override
 	public void empilhar(Integer item) throws PilhaCheiaException {
-		// TODO Auto-generated method stub
-//		listaEncadeada.insere(item);
-		
+		NodoListaEncadeada<Integer> novoNo = new NodoListaEncadeada<>(item);
+		novoNo.setProximo(cabeca);
+		cabeca = novoNo;
 	}
 
 	@Override
 	public Integer desempilhar() throws PilhaVaziaException {
-		// TODO Auto-generated method stub
-		return null;
+		if (isEmpty()) {
+			throw new PilhaVaziaException();
+		}
+		Integer topo = cabeca.getChave();
+		cabeca = cabeca.getProximo();
+		return topo;
 	}
 
 	@Override
 	public Integer topo() {
-		// TODO Auto-generated method stub
-		return null;
+		if (isEmpty()) {
+			return null;
+		}
+		return cabeca.getChave();
 	}
 
 	@Override
-	public PilhaIF<Integer> multitop(int k) {
-		// TODO Auto-generated method stub
-		return null;
+	public PilhaIF<Integer> multitop(int k) throws PilhaCheiaException {
+		MinhaPilhaEncadeada pilhaAux = new MinhaPilhaEncadeada();
+		NodoListaEncadeada<Integer> atual = cabeca;
+		int count = 0;
+		while (atual != null && count < k) {
+			try {
+				pilhaAux.empilhar(atual.getChave());
+			} catch (PilhaCheiaException e) {
+				break;
+			}
+			atual = atual.getProximo();
+			count++;
+		}
+		return pilhaAux;
 	}
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		return cabeca == null;
 	}
 
+	@Override
+	public int capacidade() {
+		return Integer.MAX_VALUE;
+	}
+
+	@Override
+	public int tamanho() {
+		int count = 0;
+		NodoListaEncadeada<Integer> atual = cabeca;
+		while (atual != null) {
+			count++;
+			atual = atual.getProximo();
+		}
+		return count;
+		}
+
 }
+
